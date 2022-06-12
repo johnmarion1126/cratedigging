@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import {
   DB_HOST, DB_PASSWORD, DB_PORT, DB_USERNAME,
-} from './utils/constants';
+} from './config/constants';
 
 const dataSource = new DataSource({
   type: 'postgres',

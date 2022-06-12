@@ -21,10 +21,14 @@
     "typescript": "^4.7.3"
   },
   "dependencies": {
+    "apollo-server-express": "^3.8.2",
+    "class-validator": "^0.13.2",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "graphql": "15.3.0",
     "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
+    "type-graphql": "^1.1.1",
     "typeorm": "^0.3.6"
   }
 }
