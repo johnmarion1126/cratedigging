@@ -1,4 +1,4 @@
-import 'reflect-metadata'
+import 'reflect-metadata';
 import express from 'express';
 
 import { PORT } from './utils/constants';
@@ -15,4 +15,4 @@ const startServer = async () => {
 
 startServer().catch((e) => {
   console.error(e);
-})
+});
