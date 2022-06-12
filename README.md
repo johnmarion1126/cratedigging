@@ -1,2 +1,2 @@
-# songbird
-A music sharing app for crate diggers.
+# cratedigging
+A web app for sharing and discovering new music.
