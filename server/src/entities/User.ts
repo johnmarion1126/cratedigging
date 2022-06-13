@@ -11,10 +11,10 @@ class User extends BaseEntity {
     id!: number;
 
   @Field(() => String)
-  @Column({ unique: true })
+  @Column('text', { unique: true })
     username!: string;
 
-  @Column()
+  @Column('text')
     password!: string;
 
   @Field(() => String)
