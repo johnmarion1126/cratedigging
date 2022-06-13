@@ -4,7 +4,10 @@
   "main": "index.ts",
   "scripts": {
     "watch": "tsc -w",
-    "dev": "nodemon dist/index.js"
+    "dev": "nodemon dist/index.js",
+    "start": "ts-node src/index.ts",
+    "migration:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate ./src/migrations/migration -d ./src/dataSource.ts -p",
+    "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run -d ./src/dataSource.ts"
   },
   "keywords": [],
   "author": "",
