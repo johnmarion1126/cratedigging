@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 import {
+  DB_DATABASE,
   DB_HOST, DB_PASSWORD, DB_PORT, DB_USERNAME,
 } from './config/constants';
 
@@ -11,6 +12,7 @@ const dataSource = new DataSource({
   port: parseInt(DB_PORT as string, 10),
   username: DB_USERNAME,
   password: DB_PASSWORD,
+  database: DB_DATABASE,
   entities: [User],
   migrations: ['src/migrations/*.ts'],
 });
