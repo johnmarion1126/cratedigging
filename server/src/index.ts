@@ -5,7 +5,7 @@ import { ApolloServer } from 'apollo-server-express';
 
 import { PORT } from './config/constants';
 import dataSource from './dataSource';
-import HelloResolver from './resolvers/hello';
+import UserResolver from './resolvers/user';
 
 const startServer = async () => {
   await dataSource.initialize();
@@ -13,7 +13,7 @@ const startServer = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver],
+      resolvers: [UserResolver],
     }),
   });
 
