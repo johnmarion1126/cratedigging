@@ -1,13 +1,13 @@
 import { buildSchema } from 'type-graphql';
 import { graphql } from 'graphql';
 
-import UserResolver from '../../entities/User';
+import UserResolver from '../../resolvers/user';
 
 interface Options {
   source: string;
   variableValues?: any;
 }
-const gqlCall = async ({ source, variableValues }: Options) => graphql({
+const callGraphql = async ({ source, variableValues }: Options) => graphql({
   schema: await buildSchema({
     resolvers: [UserResolver],
   }),
@@ -15,4 +15,4 @@ const gqlCall = async ({ source, variableValues }: Options) => graphql({
   variableValues,
 });
 
-export default gqlCall;
+export default callGraphql;
