@@ -33,6 +33,13 @@ class UserResolver {
       ...input,
     }).save();
   }
+
+  @Mutation(() => Boolean)
+  async deleteUser(@Arg('id', () => Int) id: number): Promise<boolean> {
+    const res = await User.delete(id);
+    if (res.affected) return true;
+    return false;
+  }
 }
 
 export default UserResolver;
