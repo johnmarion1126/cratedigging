@@ -1,5 +1,6 @@
 import {
   Arg,
+  Int,
   Field, InputType, Mutation, Query, Resolver,
 } from 'type-graphql';
 import User from '../entities/User';
@@ -17,6 +18,11 @@ class UserResolver {
   @Query(() => [User])
   async users(): Promise<User[]> {
     return User.find();
+  }
+
+  @Query(() => User, { nullable: true })
+  user(@Arg('id', () => Int) id: number): Promise<User | null> {
+    return User.findOne({ where: { id } });
   }
 
   @Mutation(() => User)
