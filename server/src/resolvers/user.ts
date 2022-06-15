@@ -1,9 +1,19 @@
 import {
   Arg,
   Int,
-  Field, InputType, Mutation, Query, Resolver, ObjectType,
+  Field,
+  InputType,
+  Mutation,
+  Query,
+  Resolver,
+  ObjectType,
+  Ctx,
 } from 'type-graphql';
+import argon2 from 'argon2';
+
 import User from '../entities/User';
+import { MyContext } from '../types';
+import dataSource from '../dataSource';
 
 @InputType()
 class UsernamePasswordInput {
@@ -43,13 +53,43 @@ class UserResolver {
     return User.findOne({ where: { id } });
   }
 
-  @Mutation(() => User)
-  async createUser(
+  @Mutation(() => UserResponse)
+  async register(
     @Arg('input', () => UsernamePasswordInput) input: UsernamePasswordInput,
-  ) : Promise<User> {
-    return User.create({
-      ...input,
-    }).save();
+    @Ctx() { req }: MyContext,
+  ) : Promise<UserResponse> {
+    const hashedPassword = await argon2.hash(input.password);
+    let user;
+    try {
+      const result = await dataSource
+        .createQueryBuilder()
+        .insert()
+        .into(User)
+        .values({
+          username: input.username,
+          password: hashedPassword,
+        })
+        .returning('*')
+        .execute();
+      // eslint-disable-next-line prefer-destructuring
+      user = result.raw[0];
+    } catch (err: Error | any) {
+      if (err.code === '23505') {
+        return {
+          errors: [
+            {
+              field: 'username',
+              message: 'username already been taken',
+            },
+          ],
+        };
+      }
+    }
+    req.session.userId = user.id;
+
+    return {
+      user,
+    };
   }
 
   @Mutation(() => Boolean)

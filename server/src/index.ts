@@ -31,7 +31,7 @@ const startServer = async () => {
     session({
       name: COOKIE_NAME,
       store: new RedisStore({
-        client: redisClient,
+        client: redisClient as any,
         disableTouch: true,
       }),
       cookie: {
