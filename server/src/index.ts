@@ -22,10 +22,14 @@ const startServer = async () => {
     cors({
       origin: [
         'http://localhost:3000',
-        'https://studio.apollographql.com'],
+        'https://studio.apollographql.com',
+        'http://localhost:8000/graphql',
+      ],
       credentials: true,
     }),
   );
+
+  app.set('trust proxy', process.env.NODE_ENV !== 'production');
 
   app.use(
     session({
@@ -37,8 +41,8 @@ const startServer = async () => {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
         httpOnly: true,
-        sameSite: 'lax',
-        secure: false,
+        sameSite: 'none',
+        secure: true,
       },
       saveUninitialized: false,
       secret: SECRET as string,
@@ -56,6 +60,14 @@ const startServer = async () => {
   await apolloServer.start();
   apolloServer.applyMiddleware({
     app,
+    cors: {
+      credentials: true,
+      origin: [
+        'http://localhost:3000',
+        'https://studio.graphql.com',
+        'http://localhost:8000/graphql',
+      ],
+    },
   });
 
   app.listen(PORT, () => {
