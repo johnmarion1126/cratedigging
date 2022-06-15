@@ -1,9 +1,19 @@
 import {
   Arg,
   Int,
-  Field, InputType, Mutation, Query, Resolver,
+  Field,
+  InputType,
+  Mutation,
+  Query,
+  Resolver,
+  ObjectType,
+  Ctx,
 } from 'type-graphql';
+import argon2 from 'argon2';
+
 import User from '../entities/User';
+import { MyContext } from '../types';
+import dataSource from '../dataSource';
 
 @InputType()
 class UsernamePasswordInput {
@@ -12,6 +22,24 @@ class UsernamePasswordInput {
 
   @Field(() => String)
     password!: string;
+}
+
+@ObjectType()
+class FieldError {
+  @Field(() => String)
+    field!: string;
+
+  @Field(() => String)
+    message!: string;
+}
+
+@ObjectType()
+class UserResponse {
+  @Field(() => [FieldError], { nullable: true })
+    errors?: FieldError[];
+
+  @Field(() => User, { nullable: true })
+    user?: User;
 }
 @Resolver()
 class UserResolver {
@@ -25,20 +53,85 @@ class UserResolver {
     return User.findOne({ where: { id } });
   }
 
-  @Mutation(() => User)
-  async createUser(
-    @Arg('input', () => UsernamePasswordInput) input: UsernamePasswordInput,
-  ) : Promise<User> {
-    return User.create({
-      ...input,
-    }).save();
-  }
-
   @Mutation(() => Boolean)
   async deleteUser(@Arg('id', () => Int) id: number): Promise<boolean> {
     const res = await User.delete(id);
     if (res.affected) return true;
     return false;
+  }
+
+  @Mutation(() => UserResponse)
+  async register(
+    @Arg('input', () => UsernamePasswordInput) input: UsernamePasswordInput,
+    @Ctx() { req }: MyContext,
+  ) : Promise<UserResponse> {
+    const hashedPassword = await argon2.hash(input.password);
+    let user;
+    try {
+      const result = await dataSource
+        .createQueryBuilder()
+        .insert()
+        .into(User)
+        .values({
+          username: input.username,
+          password: hashedPassword,
+        })
+        .returning('*')
+        .execute();
+      // eslint-disable-next-line prefer-destructuring
+      user = result.raw[0];
+    } catch (err: Error | any) {
+      if (err.code === '23505') {
+        return {
+          errors: [
+            {
+              field: 'username',
+              message: 'username already been taken',
+            },
+          ],
+        };
+      }
+    }
+
+    req.session.userId = user.id;
+
+    return {
+      user,
+    };
+  }
+
+  @Mutation(() => UserResponse)
+  async login(
+    @Arg('username', () => String) username: string,
+    @Arg('password', () => String) password: string,
+    @Ctx() { req }: MyContext,
+  ) : Promise<UserResponse> {
+    const user = await User.findOne({ where: { username } });
+    if (!user) {
+      return {
+        errors: [{
+          field: 'user',
+          message: "user doesn't exists",
+        }],
+      };
+    }
+    const valid = await argon2.verify(user.password, password);
+    if (!valid) {
+      return {
+        errors: [
+          {
+            field: 'password',
+            message: 'incorrect password',
+          },
+        ],
+      };
+    }
+
+    req.session.userId = user.id;
+
+    return {
+      user,
+    };
   }
 }
 
