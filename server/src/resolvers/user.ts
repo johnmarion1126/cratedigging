@@ -53,6 +53,13 @@ class UserResolver {
     return User.findOne({ where: { id } });
   }
 
+  @Mutation(() => Boolean)
+  async deleteUser(@Arg('id', () => Int) id: number): Promise<boolean> {
+    const res = await User.delete(id);
+    if (res.affected) return true;
+    return false;
+  }
+
   @Mutation(() => UserResponse)
   async register(
     @Arg('input', () => UsernamePasswordInput) input: UsernamePasswordInput,
@@ -92,11 +99,38 @@ class UserResolver {
     };
   }
 
-  @Mutation(() => Boolean)
-  async deleteUser(@Arg('id', () => Int) id: number): Promise<boolean> {
-    const res = await User.delete(id);
-    if (res.affected) return true;
-    return false;
+  @Mutation(() => UserResponse)
+  async login(
+    @Arg('username', () => String) username: string,
+    @Arg('password', () => String) password: string,
+    @Ctx() { req }: MyContext,
+  ) : Promise<UserResponse> {
+    const user = await User.findOne({ where: { username } });
+    if (!user) {
+      return {
+        errors: [{
+          field: 'user',
+          message: "user doesn't exists",
+        }],
+      };
+    }
+    const valid = await argon2.verify(user.password, password);
+    if (!valid) {
+      return {
+        errors: [
+          {
+            field: 'password',
+            message: 'incorrect password',
+          },
+        ],
+      };
+    }
+
+    req.session.userId = user.id;
+
+    return {
+      user,
+    };
   }
 }
 
