@@ -9,4 +9,6 @@ export const {
   DB_USERNAME,
   DB_PASSWORD,
   DB_DATABASE,
+  COOKIE_NAME,
+  SECRET,
 } = process.env;

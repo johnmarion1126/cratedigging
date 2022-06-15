@@ -1,7 +1,7 @@
 import {
   Arg,
   Int,
-  Field, InputType, Mutation, Query, Resolver,
+  Field, InputType, Mutation, Query, Resolver, ObjectType,
 } from 'type-graphql';
 import User from '../entities/User';
 
@@ -12,6 +12,24 @@ class UsernamePasswordInput {
 
   @Field(() => String)
     password!: string;
+}
+
+@ObjectType()
+class FieldError {
+  @Field(() => String)
+    field!: string;
+
+  @Field(() => String)
+    message!: string;
+}
+
+@ObjectType()
+class UserResponse {
+  @Field(() => [FieldError], { nullable: true })
+    errors?: FieldError[];
+
+  @Field(() => User, { nullable: true })
+    user?: User;
 }
 @Resolver()
 class UserResolver {
