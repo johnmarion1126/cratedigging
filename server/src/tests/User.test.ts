@@ -4,21 +4,30 @@ import User from '../entities/User';
 import callGraphql from './utils/callGraphql';
 import { testSource } from './utils/testSource';
 
-const createUser = `
+const registerUser = `
 mutation($input: UsernamePasswordInput!) {
-  createUser(input: $input) {
-    id
+  register(input: $input) {
+    user {
+      id
+      username
+    }
   }
 }
 `;
 
-const fetchUser = `
-query($id: Int!) {
-  user(id: $id) {
-    username
+// eslint-disable-next-line no-unused-vars
+const loginUser = `
+mutation($password: String!, $username: String!) {
+  login(password: $password, username: $username) {
+    user {
+      id
+      username
+    }
   }
-}`;
+}
+`;
 
+// eslint-disable-next-line no-unused-vars
 const deleteUser = `
 mutation($id: Int!) {
   deleteUser(id: $id)
@@ -41,27 +50,27 @@ afterAll(async () => {
 });
 
 describe('User Tests', () => {
-  it('create user', async () => {
+  it('register user', async () => {
     await callGraphql({
-      source: createUser,
+      source: registerUser,
       variableValues: {
         input: TEST_INPUT,
       },
     });
-
     const user = await User.findOne({ where: { id: TEST_ID } });
-    expect(user).toBeDefined();
+    expect(user?.username).toEqual(TEST_INPUT.username);
   });
 
-  it('fetch user', async () => {
+  it('login user', async () => {
     const res = await callGraphql({
-      source: fetchUser,
+      source: loginUser,
       variableValues: {
-        id: TEST_ID,
+        username: TEST_INPUT.username,
+        password: TEST_INPUT.password,
       },
     });
 
-    const resName = res.data?.user?.username;
+    const resName = res.data?.login?.user?.username;
     expect(resName).toEqual(TEST_INPUT.username);
   });
 

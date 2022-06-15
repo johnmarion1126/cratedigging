@@ -13,7 +13,6 @@ import argon2 from 'argon2';
 
 import User from '../entities/User';
 import { MyContext } from '../types';
-import dataSource from '../dataSource';
 
 @InputType()
 class UsernamePasswordInput {
@@ -66,20 +65,13 @@ class UserResolver {
     @Ctx() { req }: MyContext,
   ) : Promise<UserResponse> {
     const hashedPassword = await argon2.hash(input.password);
-    let user;
+    let user: User | undefined;
     try {
-      const result = await dataSource
-        .createQueryBuilder()
-        .insert()
-        .into(User)
-        .values({
-          username: input.username,
-          password: hashedPassword,
-        })
-        .returning('*')
-        .execute();
-      // eslint-disable-next-line prefer-destructuring
-      user = result.raw[0];
+      const res = await User.create({
+        username: input.username,
+        password: hashedPassword,
+      }).save();
+      user = res;
     } catch (err: Error | any) {
       if (err.code === '23505') {
         return {
@@ -93,7 +85,7 @@ class UserResolver {
       }
     }
 
-    req.session.userId = user.id;
+    if (req !== undefined) req.session.userId = user!.id;
 
     return {
       user,
@@ -127,7 +119,7 @@ class UserResolver {
       };
     }
 
-    req.session.userId = user.id;
+    if (req !== undefined) req.session.userId = user!.id;
 
     return {
       user,
