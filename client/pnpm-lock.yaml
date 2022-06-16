@@ -6,6 +6,7 @@ specifiers:
   '@chakra-ui/react': ^2.2.1
   '@emotion/react': ^11.9.3
   '@emotion/styled': ^11.9.3
+  '@fontsource/red-hat-display': ^4.5.9
   '@testing-library/jest-dom': ^5.16.4
   '@testing-library/react': ^13.3.0
   '@testing-library/user-event': ^14.2.0
@@ -41,6 +42,7 @@ dependencies:
   '@chakra-ui/react': 2.2.1_oremmallpzoblrxwcz24ekm5cu
   '@emotion/react': 11.9.3_ihkhab3gpahsyb3ahx7z7w4mhq
   '@emotion/styled': 11.9.3_tytwnks6ite2uco4aa43u2frpq
+  '@fontsource/red-hat-display': 4.5.9
   framer-motion: 6.3.11_biqbaboplfbrettd7655fr4n2y
   graphql: 16.5.0
   next: 12.1.6_biqbaboplfbrettd7655fr4n2y
@@ -1410,6 +1412,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@fontsource/red-hat-display/4.5.9:
+    resolution: {integrity: sha512-AbZUzPCOUpkyo/R7H2P39yQORJNPj/8s6JrYJVac7fANN/pHMoQ1JgeyCCCoRZeNKHlAfrMx1pQ+SDiS425t+A==}
+    dev: false
 
   /@graphql-typed-document-node/core/3.1.1_graphql@16.5.0:
     resolution: {integrity: sha512-NQ17ii0rK1b34VZonlmT2QMJFI70m0TRwbknO/ihlbatXyaktDhN/98vBiUU6kNBPljqGqyIrl2T4nY2RpFANg==}

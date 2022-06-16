@@ -1,10 +1,11 @@
 import React from 'react';
 import type { NextPage } from 'next';
+import { Heading } from '@chakra-ui/react';
 
 const Home: NextPage = () => (
-  <div>
+  <Heading>
     Hello World
-  </div>
+  </Heading>
 );
 
 export default Home;
