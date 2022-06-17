@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
 import { Box, Button } from '@chakra-ui/react';
 
+import toErrorMap from '../utils/toErrorMap';
 import Wrapper from '../components/Wrapper';
 import InputField from '../atoms/InputField';
 import REGISTER from '../graphql/mutations/register';
@@ -16,18 +17,14 @@ const Register: React.FC<registerProps> = () => {
   const [register] = useMutation(REGISTER);
 
   return (
-
     <Wrapper variant="small">
       <Formik
         initialValues={{ username: '', password: '' }}
-      // eslint-disable-next-line no-unused-vars
         onSubmit={async (values, { setErrors }) => {
           const response = await register({ variables: { input: values } });
-          console.log(response);
           if (response.data?.register.errors) {
-            console.log(response.data.register.errors);
+            setErrors(toErrorMap(response.data.register.errors));
           } else if (response.data?.register.user) {
-            console.log(response.data.register.user);
             router.push('/');
           }
         }}
