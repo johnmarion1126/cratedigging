@@ -8,6 +8,7 @@ import theme from '../theme';
 const client = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_API_URI,
   cache: new InMemoryCache(),
+  credentials: 'include',
 });
 
 const MyApp = ({ Component, pageProps }: AppProps) => (
