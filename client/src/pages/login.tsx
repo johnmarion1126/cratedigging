@@ -1,4 +1,5 @@
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
@@ -20,7 +21,6 @@ const Login: React.FC<registerProps> = () => {
       <Formik
         initialValues={{ username: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
-          console.log(values);
           const response = await login({ variables: { input: values } });
           if (response.data?.login.errors) {
             setErrors(toErrorMap(response.data.login.errors));
@@ -54,4 +54,6 @@ const Login: React.FC<registerProps> = () => {
   );
 };
 
-export default Login;
+export default dynamic(() => Promise.resolve(Login), {
+  ssr: false,
+});
