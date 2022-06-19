@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // eslint-disable-next-line import/no-named-default
 import { default as NextLink } from 'next/link';
 import {
@@ -14,6 +14,10 @@ const NavBar: React.FC<NavBarProps> = () => {
   const { data, loading } = useQuery(GET_USER_BY_QID);
 
   let body = null;
+
+  useEffect(() => {
+    console.log(data);
+  }, [loading]);
 
   if (loading) {
     body = null;
