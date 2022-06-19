@@ -41,8 +41,8 @@ const startServer = async () => {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
         httpOnly: true,
-        sameSite: 'lax',
-        secure: false,
+        sameSite: 'lax', // 'none'
+        secure: false, // 'true'
       },
       saveUninitialized: false,
       secret: SECRET as string,

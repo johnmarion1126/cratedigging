@@ -1,23 +1,27 @@
-import React, { useEffect } from 'react';
-// eslint-disable-next-line import/no-named-default
-import { default as NextLink } from 'next/link';
+import React from 'react';
 import {
   Box, Button, Flex, Heading, Link,
 } from '@chakra-ui/react';
-import { useQuery } from '@apollo/client';
+import { useApolloClient, useMutation, useQuery } from '@apollo/client';
+// eslint-disable-next-line import/no-named-default
+import { default as NextLink } from 'next/link';
 
 import GET_USER_BY_QID from '../graphql/queries/getUserByQid';
+import LOGOUT from '../graphql/mutations/logout';
 
 interface NavBarProps {}
 
 const NavBar: React.FC<NavBarProps> = () => {
   const { data, loading } = useQuery(GET_USER_BY_QID);
+  const [logout, { loading: logoutLoading }] = useMutation(LOGOUT);
+  const apolloClient = useApolloClient();
+
+  const handleLogOut = async () => {
+    await logout();
+    await apolloClient.resetStore();
+  };
 
   let body = null;
-
-  useEffect(() => {
-    console.log(data);
-  }, [loading]);
 
   if (loading) {
     body = null;
@@ -40,6 +44,8 @@ const NavBar: React.FC<NavBarProps> = () => {
         </Box>
         <Button
           variant="link"
+          isLoading={logoutLoading}
+          onClick={handleLogOut}
         >
           Log Out
         </Button>

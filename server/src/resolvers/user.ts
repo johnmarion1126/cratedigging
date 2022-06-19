@@ -13,6 +13,7 @@ import argon2 from 'argon2';
 
 import User from '../entities/User';
 import { MyContext } from '../types';
+import { COOKIE_NAME } from '../config/constants';
 
 @InputType()
 class UsernamePasswordInput {
@@ -134,6 +135,21 @@ class UserResolver {
     }
 
     return User.findOne({ where: { id: req.session.userId } });
+  }
+
+  @Mutation(() => Boolean)
+  logout(
+    @Ctx() { req, res }: MyContext,
+  ) {
+    // eslint-disable-next-line no-promise-executor-return
+    return new Promise((resolve) => req.session.destroy((err) => {
+      res.clearCookie(COOKIE_NAME as string);
+      if (err) {
+        resolve(false);
+        return;
+      }
+      resolve(true);
+    }));
   }
 }
 
