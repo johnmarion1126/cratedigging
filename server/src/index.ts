@@ -23,13 +23,13 @@ const startServer = async () => {
       origin: [
         'http://localhost:3000',
         'https://studio.apollographql.com',
-        'http://localhost:8000/graphql',
       ],
       credentials: true,
     }),
   );
 
   app.set('trust proxy', process.env.NODE_ENV !== 'production');
+  app.set('x-forwarded-proto', 'https');
 
   app.use(
     session({
@@ -41,8 +41,8 @@ const startServer = async () => {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
         httpOnly: true,
-        sameSite: 'none',
-        secure: true,
+        sameSite: 'lax', // 'none'
+        secure: false, // 'true'
       },
       saveUninitialized: false,
       secret: SECRET as string,
@@ -65,7 +65,6 @@ const startServer = async () => {
       origin: [
         'http://localhost:3000',
         'https://studio.graphql.com',
-        'http://localhost:8000/graphql',
       ],
     },
   });
