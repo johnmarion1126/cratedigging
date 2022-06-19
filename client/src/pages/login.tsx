@@ -25,7 +25,6 @@ const Login: React.FC<registerProps> = () => {
           const response = await login({
             variables: { input: values },
             update: (cache, { data }) => {
-              console.log('data', data);
               cache.writeQuery({
                 query: GET_USER_BY_QID,
                 data: {

@@ -9,6 +9,7 @@ import toErrorMap from '../utils/toErrorMap';
 import Wrapper from '../components/Wrapper';
 import InputField from '../atoms/InputField';
 import REGISTER from '../graphql/mutations/register';
+import GET_USER_BY_QID from '../graphql/queries/getUserByQid';
 
 interface registerProps {}
 
@@ -21,7 +22,18 @@ const Register: React.FC<registerProps> = () => {
       <Formik
         initialValues={{ username: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
-          const response = await register({ variables: { input: values } });
+          const response = await register({
+            variables: { input: values },
+            update: (cache, { data }) => {
+              cache.writeQuery({
+                query: GET_USER_BY_QID,
+                data: {
+                  __typename: 'Query',
+                  getUserByQid: data?.register.user,
+                },
+              });
+            },
+          });
           if (response.data?.register.errors) {
             setErrors(toErrorMap(response.data.register.errors));
           } else if (response.data?.register.user) {
