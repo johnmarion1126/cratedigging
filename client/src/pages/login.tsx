@@ -56,7 +56,12 @@ const Login: React.FC<registerProps> = () => {
                 type="password"
               />
             </Box>
-            <Button type="submit" mt={4} isLoading={isSubmitting}>
+            <Button
+              type="submit"
+              mt={4}
+              isLoading={isSubmitting}
+              data-testid="login-btn"
+            >
               Login
             </Button>
           </Form>
