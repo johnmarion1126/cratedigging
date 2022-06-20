@@ -1,21 +1,37 @@
 import React from 'react';
-import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
-// eslint-disable-next-line no-unused-vars
+import { render, waitFor } from '@testing-library/react';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 
-import { act } from 'react-test-renderer';
 import Login from '../pages/login';
+import LOGIN from '../graphql/mutations/login';
 
-// eslint-disable-next-line no-unused-vars
-const mocks: MockedResponse<Record<string, any>>[] | undefined = [];
+const mocks: MockedResponse<Record<string, any>>[] | undefined = [{
+  request: {
+    query: LOGIN,
+    variables: {
+      username: 'test_username',
+      password: 'test_password',
+    },
+  },
+  result: () => ({
+    data: {
+      user: { username: 'test_username', password: 'test_password' },
+    },
+  }),
+}];
 
-test('render note form', async () => {
-  await act(() => {
-    render(
-      <Login />,
-    );
+test('render login form', async () => {
+  const component = render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <Login />
+    </MockedProvider>,
+  );
+
+  await waitFor(() => {
+    const usernameForm = component.getByTestId('username-form');
+    const passwordForm = component.getByTestId('password-form');
+
+    expect(usernameForm).toBeDefined();
+    expect(passwordForm).toBeDefined();
   });
-
-  screen.getByTestId('login-btn');
 });

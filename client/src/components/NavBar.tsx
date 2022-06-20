@@ -39,7 +39,7 @@ const NavBar: React.FC<NavBarProps> = () => {
   } else {
     body = (
       <Flex>
-        <Box mr={2}>
+        <Box mr={2} data-testid="nav-username">
           {data.getUserByQid.username}
         </Box>
         <Button
