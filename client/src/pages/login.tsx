@@ -47,6 +47,7 @@ const Login: React.FC<registerProps> = () => {
               name="username"
               placeholder="username"
               label="Username"
+              data-testid="username-form"
             />
             <Box mt={4}>
               <InputField
@@ -54,9 +55,15 @@ const Login: React.FC<registerProps> = () => {
                 placeholder="password"
                 label="Password"
                 type="password"
+                data-testid="password-form"
               />
             </Box>
-            <Button type="submit" mt={4} isLoading={isSubmitting}>
+            <Button
+              type="submit"
+              mt={4}
+              isLoading={isSubmitting}
+              data-testid="login-btn"
+            >
               Login
             </Button>
           </Form>

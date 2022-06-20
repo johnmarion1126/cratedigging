@@ -14,6 +14,7 @@ specifiers:
   '@types/node': 18.0.0
   '@types/react': 18.0.12
   '@types/react-dom': 18.0.5
+  '@types/react-test-renderer': ^18.0.0
   '@typescript-eslint/eslint-plugin': ^5.28.0
   '@typescript-eslint/parser': ^5.28.0
   eslint: ^7.32.0 || ^8.2.0
@@ -59,6 +60,7 @@ devDependencies:
   '@types/node': 18.0.0
   '@types/react': 18.0.12
   '@types/react-dom': 18.0.5
+  '@types/react-test-renderer': 18.0.0
   '@typescript-eslint/eslint-plugin': 5.28.0_7yumg2qjgbp7maccqlfhx2vudu
   '@typescript-eslint/parser': 5.28.0_ud6rd4xtew5bv4yhvkvu24pzm4
   eslint: 8.17.0
@@ -2047,6 +2049,12 @@ packages:
 
   /@types/react-dom/18.0.5:
     resolution: {integrity: sha512-OWPWTUrY/NIrjsAPkAk1wW9LZeIjSvkXRhclsFO8CZcZGCOg2G0YZy4ft+rOyYxy8B7ui5iZzi9OkDebZ7/QSA==}
+    dependencies:
+      '@types/react': 18.0.12
+    dev: true
+
+  /@types/react-test-renderer/18.0.0:
+    resolution: {integrity: sha512-C7/5FBJ3g3sqUahguGi03O79b8afNeSD6T8/GU50oQrJCU0bVCCGQHaGKUbg2Ce8VQEEqTw8/HiS6lXHHdgkdQ==}
     dependencies:
       '@types/react': 18.0.12
     dev: true
