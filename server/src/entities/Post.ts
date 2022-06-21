@@ -13,7 +13,7 @@ class Post extends BaseEntity {
     id!: number;
 
   @Field(() => String)
-  @Column('title')
+  @Column('text')
     title!: string;
 
   @Field(() => String)
