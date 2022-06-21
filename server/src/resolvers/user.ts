@@ -86,7 +86,7 @@ class UserResolver {
       }
     }
 
-    if (req !== undefined) req.session.userId = user!.id;
+    if (req) req.session.userId = user!.id;
 
     return {
       user,
@@ -119,7 +119,7 @@ class UserResolver {
       };
     }
 
-    if (req !== undefined) req.session.userId = user!.id;
+    if (req) req.session.userId = user!.id;
 
     return {
       user,

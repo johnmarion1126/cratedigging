@@ -17,8 +17,8 @@ mutation($input: UsernamePasswordInput!) {
 
 // eslint-disable-next-line no-unused-vars
 const loginUser = `
-mutation($password: String!, $username: String!) {
-  login(password: $password, username: $username) {
+mutation($input: UsernamePasswordInput!) {
+  login(input: $input) {
     user {
       id
       username
@@ -65,8 +65,7 @@ describe('User Tests', () => {
     const res = await callGraphql({
       source: loginUser,
       variableValues: {
-        username: TEST_INPUT.username,
-        password: TEST_INPUT.password,
+        input: TEST_INPUT,
       },
     });
 

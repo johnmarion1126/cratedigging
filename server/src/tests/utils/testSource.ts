@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm';
 import {
   DB_HOST, DB_PASSWORD, DB_PORT, DB_USERNAME,
 } from '../../config/constants';
+import Post from '../../entities/Post';
 import User from '../../entities/User';
 
 export const testSource = async (drop: boolean = false) => {
@@ -15,7 +16,7 @@ export const testSource = async (drop: boolean = false) => {
     database: 'crates-test',
     dropSchema: drop,
     synchronize: drop,
-    entities: [User],
+    entities: [User, Post],
     migrations: ['src/migrations/*.ts'],
   });
   await result.initialize();
