@@ -55,9 +55,10 @@ class PostResolver {
       throw new Error('not authorized');
     }
 
-    post.title = input.title;
-    post.text = input.text;
-    await post.save();
+    await Post.update({ id }, {
+      title: input.title,
+      text: input.text,
+    });
   }
 
   @Mutation(() => Boolean)
