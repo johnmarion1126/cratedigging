@@ -9,8 +9,6 @@ import Post from '../entities/Post';
 import User from '../entities/User';
 import { MyContext } from '../types';
 
-// TODO: WRITE AUTH MIDDLEWARE
-// TODO: WRITE TESTS FOR RESOLVERS
 @InputType()
 class PostInput {
   @Field(() => String)
@@ -48,10 +46,10 @@ class PostResolver {
     @Arg('input', () => PostInput) input: PostInput,
     @Arg('id', () => Int) id: number,
     @Ctx() { req }: MyContext,
-  ) {
+  ): Promise<Post | null> {
     const post = await Post.findOne({ where: { id } });
 
-    if (!post) return;
+    if (!post) return null;
 
     if (post.creatorId !== req.session.userId) {
       throw new Error('not authorized');
@@ -61,6 +59,11 @@ class PostResolver {
       title: input.title,
       text: input.text,
     });
+
+    post.title = input.title;
+    post.text = input.text;
+
+    return post;
   }
 
   @Mutation(() => Boolean)
