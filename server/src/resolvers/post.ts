@@ -9,6 +9,8 @@ import Post from '../entities/Post';
 import User from '../entities/User';
 import { MyContext } from '../types';
 
+// TODO: WRITE AUTH MIDDLEWARE
+// TODO: WRITE TESTS FOR RESOLVERS
 @InputType()
 class PostInput {
   @Field(() => String)
