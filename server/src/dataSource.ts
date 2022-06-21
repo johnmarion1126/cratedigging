@@ -4,6 +4,7 @@ import {
   DB_HOST, DB_PASSWORD, DB_PORT, DB_USERNAME,
 } from './config/constants';
 
+import Post from './entities/Post';
 import User from './entities/User';
 
 const dataSource = new DataSource({
@@ -13,7 +14,7 @@ const dataSource = new DataSource({
   username: DB_USERNAME,
   password: DB_PASSWORD,
   database: DB_DATABASE,
-  entities: [User],
+  entities: [User, Post],
   migrations: ['src/migrations/*.ts'],
 });
 
