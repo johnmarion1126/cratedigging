@@ -15,7 +15,6 @@ mutation($input: UsernamePasswordInput!) {
 }
 `;
 
-// eslint-disable-next-line no-unused-vars
 const loginUser = `
 mutation($input: UsernamePasswordInput!) {
   login(input: $input) {
@@ -27,7 +26,6 @@ mutation($input: UsernamePasswordInput!) {
 }
 `;
 
-// eslint-disable-next-line no-unused-vars
 const deleteUser = `
 mutation($id: Int!) {
   deleteUser(id: $id)
