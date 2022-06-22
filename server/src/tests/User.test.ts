@@ -55,6 +55,7 @@ describe('User Tests', () => {
         input: TEST_INPUT,
       },
     });
+
     const user = await User.findOne({ where: { id: TEST_ID } });
     expect(user?.username).toEqual(TEST_INPUT.username);
   });

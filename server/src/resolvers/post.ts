@@ -39,7 +39,7 @@ class PostResolver {
   ) : Promise<Post> {
     return Post.create({
       ...input,
-      creatorId: req.session.userId,
+      creatorId: req ? req.session.userId : 1,
     }).save();
   }
 
