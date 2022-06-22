@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm';
 import User from '../entities/User';
 import callGraphql from './utils/callGraphql';
 import { testSource } from './utils/testSource';
+import { TEST_ID, TEST_USER } from './utils/constants';
 
 const registerUser = `
 mutation($input: UsernamePasswordInput!) {
@@ -26,16 +27,11 @@ mutation($input: UsernamePasswordInput!) {
 }
 `;
 
-const deleteUser = `
+// eslint-disable-next-line import/prefer-default-export
+export const deleteUser = `
 mutation($id: Int!) {
   deleteUser(id: $id)
 }`;
-
-const TEST_ID = 1;
-const TEST_INPUT = {
-  username: 'John',
-  password: 'John',
-};
 
 let connection: DataSource;
 
@@ -52,35 +48,23 @@ describe('User Tests', () => {
     await callGraphql({
       source: registerUser,
       variableValues: {
-        input: TEST_INPUT,
+        input: TEST_USER,
       },
     });
 
     const user = await User.findOne({ where: { id: TEST_ID } });
-    expect(user?.username).toEqual(TEST_INPUT.username);
+    expect(user?.username).toEqual(TEST_USER.username);
   });
 
   it('login user', async () => {
     const res = await callGraphql({
       source: loginUser,
       variableValues: {
-        input: TEST_INPUT,
+        input: TEST_USER,
       },
     });
 
     const resName = res.data?.login?.user?.username;
-    expect(resName).toEqual(TEST_INPUT.username);
-  });
-
-  it('delete user', async () => {
-    const res = await callGraphql({
-      source: deleteUser,
-      variableValues: {
-        id: TEST_ID,
-      },
-    });
-
-    const resState = res.data?.deleteUser;
-    expect(resState).toBeTruthy();
+    expect(resName).toEqual(TEST_USER.username);
   });
 });

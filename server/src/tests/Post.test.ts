@@ -4,6 +4,8 @@ import { DataSource } from 'typeorm';
 import Post from '../entities/Post';
 import callGraphql from './utils/callGraphql';
 import { testSource } from './utils/testSource';
+import { deleteUser } from './User.test';
+import { TEST_USER, TEST_POST, TEST_ID } from './utils/constants';
 
 const createPost = `
 mutation($input: PostInput!) {
@@ -29,27 +31,6 @@ mutation($id: Int!) {
 }
 `;
 
-const registerUser = `
-mutation($input: UsernamePasswordInput!) {
-  register(input: $input) {
-    user {
-      id
-      username
-    }
-  }
-}
-`;
-
-const TEST_ID = 1;
-const TEST_INPUT = {
-  title: 'Test title',
-  text: 'Test text',
-};
-const TEST_USER = {
-  username: 'John',
-  password: 'John',
-};
-
 let connection: DataSource;
 
 beforeAll(async () => {
@@ -62,24 +43,29 @@ afterAll(async () => {
 
 describe('Post Tests', () => {
   it('create post', async () => {
-    const resUser = await callGraphql({
-      source: registerUser,
-      variableValues: {
-        input: TEST_USER,
-      },
-    });
-
-    console.log(resUser?.data?.register?.user);
-
     const res = await callGraphql({
       source: createPost,
       variableValues: {
-        input: TEST_INPUT,
+        input: TEST_POST,
       },
     });
 
     const post = await Post.findOne({ where: { id: TEST_ID } });
-    expect(post?.title).toEqual(TEST_INPUT.title);
-    expect(post?.text).toEqual(TEST_INPUT.text);
+    expect(post?.title).toEqual(TEST_POST.title);
+    expect(post?.text).toEqual(TEST_POST.text);
+  });
+
+  it('delete user and posts', async () => {
+    const res = await callGraphql({
+      source: deleteUser,
+      variableValues: {
+        id: TEST_ID,
+      },
+    });
+
+    const resState = res.data?.deleteUser;
+    expect(resState).toBeTruthy();
+    const post = await Post.find({ where: { id: TEST_ID } });
+    expect(post.length).toEqual(0);
   });
 });
