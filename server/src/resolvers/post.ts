@@ -2,15 +2,14 @@ import {
   Arg,
   Ctx,
   Field,
-  FieldResolver, InputType, Int, Mutation, Query, Resolver, Root,
+  FieldResolver, InputType, Int, Mutation, Query, Resolver, Root, UseMiddleware,
 } from 'type-graphql';
 
+import { MyContext } from '../types';
 import Post from '../entities/Post';
 import User from '../entities/User';
-import { MyContext } from '../types';
+import isAuth from '../middleware/isAuth';
 
-// TODO: WRITE AUTH MIDDLEWARE
-// TODO: WRITE TESTS FOR RESOLVERS
 @InputType()
 class PostInput {
   @Field(() => String)
@@ -33,27 +32,29 @@ class PostResolver {
   }
 
   @Mutation(() => Post)
+  @UseMiddleware(isAuth)
   async createPost(
     @Arg('input', () => PostInput) input: PostInput,
     @Ctx() { req }: MyContext,
   ) : Promise<Post> {
     return Post.create({
       ...input,
-      creatorId: req.session.userId,
+      creatorId: req ? req.session.userId : 1,
     }).save();
   }
 
   @Mutation(() => Post)
+  @UseMiddleware(isAuth)
   async updatePost(
     @Arg('input', () => PostInput) input: PostInput,
     @Arg('id', () => Int) id: number,
     @Ctx() { req }: MyContext,
-  ) {
+  ): Promise<Post | null> {
     const post = await Post.findOne({ where: { id } });
 
-    if (!post) return;
+    if (!post) return null;
 
-    if (post.creatorId !== req.session.userId) {
+    if (req && post.creatorId !== req.session.userId) {
       throw new Error('not authorized');
     }
 
@@ -61,9 +62,15 @@ class PostResolver {
       title: input.title,
       text: input.text,
     });
+
+    post.title = input.title;
+    post.text = input.text;
+
+    return post;
   }
 
   @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
   async deletePost(
     @Arg('id', () => Int) id: number,
     @Ctx() { req }: MyContext,

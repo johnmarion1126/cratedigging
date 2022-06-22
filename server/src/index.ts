@@ -10,6 +10,7 @@ import { ApolloServer } from 'apollo-server-express';
 import { COOKIE_NAME, PORT, SECRET } from './config/constants';
 import dataSource from './dataSource';
 import UserResolver from './resolvers/user';
+import PostResolver from './resolvers/post';
 
 const startServer = async () => {
   await dataSource.initialize();
@@ -41,8 +42,8 @@ const startServer = async () => {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
         httpOnly: true,
-        sameSite: 'lax', // 'none'
-        secure: false, // 'true'
+        sameSite: 'none', // 'none' 'lax'
+        secure: true, // 'true' 'false'
       },
       saveUninitialized: false,
       secret: SECRET as string,
@@ -52,7 +53,7 @@ const startServer = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver],
+      resolvers: [UserResolver, PostResolver],
     }),
     context: ({ req, res }) => ({ req, res, redisClient }),
   });

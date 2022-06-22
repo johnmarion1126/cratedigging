@@ -2,6 +2,7 @@ import { buildSchema } from 'type-graphql';
 import { graphql } from 'graphql';
 
 import UserResolver from '../../resolvers/user';
+import PostResolver from '../../resolvers/post';
 
 interface Options {
   source: string;
@@ -10,7 +11,7 @@ interface Options {
 
 const callGraphql = async ({ source, variableValues }: Options) => graphql({
   schema: await buildSchema({
-    resolvers: [UserResolver],
+    resolvers: [UserResolver, PostResolver],
   }),
   source,
   variableValues,
