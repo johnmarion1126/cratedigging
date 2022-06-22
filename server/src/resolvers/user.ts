@@ -14,6 +14,7 @@ import argon2 from 'argon2';
 import User from '../entities/User';
 import { MyContext } from '../types';
 import { COOKIE_NAME } from '../config/constants';
+import Post from '../entities/Post';
 
 @InputType()
 class UsernamePasswordInput {
@@ -55,9 +56,12 @@ class UserResolver {
 
   @Mutation(() => Boolean)
   async deleteUser(@Arg('id', () => Int) id: number): Promise<boolean> {
-    const res = await User.delete(id);
-    if (res.affected) return true;
-    return false;
+    const user = await User.findOne({ where: { id } });
+    if (!user) return false;
+
+    await Post.delete({ creatorId: id });
+    await User.delete(id);
+    return true;
   }
 
   @Mutation(() => UserResponse)
