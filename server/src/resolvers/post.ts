@@ -54,7 +54,7 @@ class PostResolver {
 
     if (!post) return null;
 
-    if (post.creatorId !== req.session.userId) {
+    if (req && post.creatorId !== req.session.userId) {
       throw new Error('not authorized');
     }
 

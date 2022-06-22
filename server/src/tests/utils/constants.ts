@@ -8,10 +8,15 @@ const constants = {
     title: 'FIRST TITLE',
     text: 'FIRST_TEXT',
   },
+  UPDATE_TEST_POST: {
+    title: 'NEW TITLE',
+    text: 'NEW TEXT',
+  },
 };
 
 export const {
   TEST_ID,
   TEST_USER,
   TEST_POST,
+  UPDATE_TEST_POST,
 } = constants;
