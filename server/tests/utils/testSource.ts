@@ -2,9 +2,9 @@ import { DataSource } from 'typeorm';
 
 import {
   DB_HOST, DB_PASSWORD, DB_PORT, DB_USERNAME,
-} from '../../config/constants';
-import Post from '../../entities/Post';
-import User from '../../entities/User';
+} from '../../src/config/constants';
+import Post from '../../src/entities/Post';
+import User from '../../src/entities/User';
 
 export const testSource = async (drop: boolean = false) => {
   const result = new DataSource({
