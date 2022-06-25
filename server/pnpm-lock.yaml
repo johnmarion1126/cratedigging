@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@jest/globals': ^28.1.1
   '@types/connect-redis': ^0.0.18
   '@types/cors': ^2.8.12
   '@types/express': ^4.17.13
@@ -51,6 +52,7 @@ dependencies:
   typeorm: 0.3.6_2uoouv42u3pmvdvmlpn25xujzy
 
 devDependencies:
+  '@jest/globals': 28.1.1
   '@types/connect-redis': 0.0.18
   '@types/cors': 2.8.12
   '@types/express': 4.17.13

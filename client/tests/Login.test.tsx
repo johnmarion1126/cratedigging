@@ -1,9 +1,10 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 
-import Login from '../pages/login';
-import LOGIN from '../graphql/mutations/login';
+import Login from '../src/pages/login';
+import LOGIN from '../src/graphql/mutations/login';
 
 const mocks: MockedResponse<Record<string, any>>[] | undefined = [{
   request: {

@@ -1,6 +1,14 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { DataSource } from 'typeorm';
+import {
+  beforeAll,
+  afterAll,
+  describe,
+  expect,
+  it,
+} from '@jest/globals';
 
-import Post from '../entities/Post';
+import Post from '../src/entities/Post';
 import callGraphql from './utils/callGraphql';
 import { testSource } from './utils/testSource';
 import { deleteUser } from './User.test';

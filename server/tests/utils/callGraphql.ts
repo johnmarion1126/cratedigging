@@ -1,8 +1,8 @@
 import { buildSchema } from 'type-graphql';
 import { graphql } from 'graphql';
 
-import UserResolver from '../../resolvers/user';
-import PostResolver from '../../resolvers/post';
+import UserResolver from '../../src/resolvers/user';
+import PostResolver from '../../src/resolvers/post';
 
 interface Options {
   source: string;
