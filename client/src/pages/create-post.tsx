@@ -1,28 +1,31 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
+import { useRouter } from 'next/router';
+import { useMutation } from '@apollo/client';
 import { Box, Button } from '@chakra-ui/react';
 
 import Layout from '../components/Layout';
 import InputField from '../atoms/InputField';
+import CREATE_POST from '../graphql/mutations/createPost';
 
 const CreatePost: React.FC<{}> = () => {
-  console.log('Hello World');
+  const router = useRouter();
+  const [createPost] = useMutation(CREATE_POST);
 
   return (
     <Layout variant="small">
       <Formik
         initialValues={{ title: '', text: '' }}
         onSubmit={async (values) => {
-          console.log({ values });
-          // const { errors } = await createPost({
-          //   variables: { input: values },
-          //   update: (cache) => {
-          //     cache.evict({ fieldName: 'posts' });
-          //   },
-          // });
-          // if (!errors) {
-          //   router.push('/');
-          // }
+          const { errors } = await createPost({
+            variables: { input: values },
+            update: (cache) => {
+              cache.evict({ fieldName: 'posts' });
+            },
+          });
+          if (!errors) {
+            router.push('/');
+          }
         }}
       >
         {({ isSubmitting }) => (
