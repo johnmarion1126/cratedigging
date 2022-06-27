@@ -25,7 +25,7 @@ const Home: NextPage = () => {
       {!data && loading
         ? (<div>Loading...</div>)
         : (
-          data.posts.map((p: any) => (!p ? null : (
+          data && data.posts.map((p: any) => (!p ? null : (
             <Flex flexDir="column" key={p.id} p={5} borderWidth="1px" mb={5}>
               <Flex mb={4} w="full">
                 <Heading fontSize="xl">{p.title}</Heading>
