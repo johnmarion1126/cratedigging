@@ -6,6 +6,8 @@ import {
   FieldResolver, InputType, Int, Mutation, Query, Resolver, Root, UseMiddleware,
 } from 'type-graphql';
 
+import { createWriteStream } from 'fs';
+import path from 'path';
 import { MyContext } from '../types';
 import Post from '../entities/Post';
 import User from '../entities/User';
@@ -99,7 +101,17 @@ class PostResolver {
   async uploadFile(
     @Arg('file', () => GraphQLUpload) file: FileUpload,
   ) : Promise<boolean> {
-    console.log(file);
+    try {
+      const { createReadStream, filename } = file;
+
+      // eslint-disable-next-line no-promise-executor-return
+      await new Promise((res) => createReadStream()
+        .pipe(createWriteStream(path.join(__dirname, '../music', filename)))
+        .on('close', res));
+    } catch (err) {
+      return false;
+    }
+
     return true;
   }
 }
