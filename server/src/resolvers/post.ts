@@ -1,10 +1,17 @@
-import { GraphQLUpload, FileUpload } from 'graphql-upload';
 import {
   Arg,
   Ctx,
   Field,
-  FieldResolver, InputType, Int, Mutation, Query, Resolver, Root, UseMiddleware,
+  FieldResolver,
+  InputType,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+  UseMiddleware,
 } from 'type-graphql';
+import { GraphQLUpload, FileUpload } from 'graphql-upload';
 
 import { createWriteStream } from 'fs';
 import path from 'path';
@@ -21,14 +28,6 @@ class PostInput {
   @Field(() => String)
     text!: string;
 }
-// @InputType()
-// class FileInput {
-//   @Field(() => String)
-//     name!: string;
-
-//   @Field(() => String)
-//     type!: string;
-// }
 
 @Resolver(Post)
 class PostResolver {

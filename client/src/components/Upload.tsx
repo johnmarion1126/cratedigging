@@ -13,16 +13,7 @@ const Upload = () => {
 
   const onDrop = useCallback(
     async ([file]: any) => {
-      console.log(file);
-      // const fileInput = {
-      //   name: file.name,
-      //   type: file.type,
-      // };
-
-      // console.log(fileInput);
-
-      const res = await uploadFile({ variables: { file } });
-      console.log(res);
+      uploadFile({ variables: { file } });
     },
     [uploadFile],
   );
