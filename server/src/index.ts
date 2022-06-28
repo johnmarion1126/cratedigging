@@ -6,6 +6,7 @@ import session from 'express-session';
 import connectRedis from 'connect-redis';
 import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
+import { graphqlUploadExpress } from 'graphql-upload';
 
 import { COOKIE_NAME, PORT, SECRET } from './config/constants';
 import dataSource from './dataSource';
@@ -59,6 +60,9 @@ const startServer = async () => {
   });
 
   await apolloServer.start();
+
+  app.use(graphqlUploadExpress());
+
   apolloServer.applyMiddleware({
     app,
     cors: {

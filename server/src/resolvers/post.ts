@@ -2,9 +2,19 @@ import {
   Arg,
   Ctx,
   Field,
-  FieldResolver, InputType, Int, Mutation, Query, Resolver, Root, UseMiddleware,
+  FieldResolver,
+  InputType,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+  UseMiddleware,
 } from 'type-graphql';
+import { GraphQLUpload, FileUpload } from 'graphql-upload';
 
+import { createWriteStream } from 'fs';
+import path from 'path';
 import { MyContext } from '../types';
 import Post from '../entities/Post';
 import User from '../entities/User';
@@ -83,6 +93,24 @@ class PostResolver {
     }
 
     await Post.delete({ id });
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  async uploadFile(
+    @Arg('file', () => GraphQLUpload) file: FileUpload,
+  ) : Promise<boolean> {
+    try {
+      const { createReadStream, filename } = file;
+
+      // eslint-disable-next-line no-promise-executor-return
+      await new Promise((res) => createReadStream()
+        .pipe(createWriteStream(path.join(__dirname, '../music', filename)))
+        .on('close', res));
+    } catch (err) {
+      return false;
+    }
+
     return true;
   }
 }
