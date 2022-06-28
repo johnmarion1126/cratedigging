@@ -1,3 +1,4 @@
+import { GraphQLUpload, FileUpload } from 'graphql-upload';
 import {
   Arg,
   Ctx,
@@ -18,6 +19,14 @@ class PostInput {
   @Field(() => String)
     text!: string;
 }
+// @InputType()
+// class FileInput {
+//   @Field(() => String)
+//     name!: string;
+
+//   @Field(() => String)
+//     type!: string;
+// }
 
 @Resolver(Post)
 class PostResolver {
@@ -83,6 +92,14 @@ class PostResolver {
     }
 
     await Post.delete({ id });
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  async uploadFile(
+    @Arg('file', () => GraphQLUpload) file: FileUpload,
+  ) : Promise<boolean> {
+    console.log(file);
     return true;
   }
 }
