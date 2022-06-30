@@ -10,11 +10,14 @@ import InputField from '../atoms/InputField';
 import UploadInput from '../components/UploadInput';
 import CREATE_POST from '../graphql/mutations/createPost';
 import UPLOAD_FILE from '../graphql/mutations/uploadFile';
+import checkIfAuth from '../utils/checkIfAuth';
 
 const CreatePost: React.FC<{}> = () => {
   const router = useRouter();
   const [createPost] = useMutation(CREATE_POST);
   const [uploadFile] = useMutation(UPLOAD_FILE);
+
+  checkIfAuth();
 
   const [file, setFile] = useState<File>();
 
@@ -32,7 +35,6 @@ const CreatePost: React.FC<{}> = () => {
       <Formik
         initialValues={{ title: '', text: '' }}
         onSubmit={async (values) => {
-          console.log(file);
           const { errors } = await createPost({
             variables: {
               input: {
