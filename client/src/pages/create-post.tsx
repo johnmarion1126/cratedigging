@@ -32,8 +32,15 @@ const CreatePost: React.FC<{}> = () => {
       <Formik
         initialValues={{ title: '', text: '' }}
         onSubmit={async (values) => {
+          console.log(file);
           const { errors } = await createPost({
-            variables: { input: values },
+            variables: {
+              input: {
+                title: values.title,
+                text: values.text,
+              },
+              file,
+            },
             update: (cache) => {
               cache.evict({ fieldName: 'posts' });
             },

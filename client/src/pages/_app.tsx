@@ -8,7 +8,11 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import theme from '../theme';
 
 const client = new ApolloClient({
-  link: createUploadLink({ uri: process.env.NEXT_PUBLIC_API_URI }),
+  link: createUploadLink({
+    uri: process.env.NEXT_PUBLIC_API_URI,
+    fetch,
+    fetchOptions: { credentials: 'include' },
+  }),
   cache: new InMemoryCache(),
   credentials: 'include',
 });

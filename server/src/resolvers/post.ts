@@ -27,9 +27,6 @@ class PostInput {
 
   @Field(() => String)
     text!: string;
-
-  @Field(() => GraphQLUpload)
-    file!: FileUpload;
 }
 
 @Resolver(Post)
@@ -48,10 +45,11 @@ class PostResolver {
   @UseMiddleware(isAuth)
   async createPost(
     @Arg('input', () => PostInput) input: PostInput,
+    @Arg('file', () => GraphQLUpload) file: FileUpload,
     @Ctx() { req }: MyContext,
   ) : Promise<Post> {
     try {
-      const { createReadStream, filename } = input.file;
+      const { createReadStream, filename } = file;
 
       // eslint-disable-next-line no-promise-executor-return
       await new Promise((res) => createReadStream()
