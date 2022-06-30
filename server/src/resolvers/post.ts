@@ -45,8 +45,20 @@ class PostResolver {
   @UseMiddleware(isAuth)
   async createPost(
     @Arg('input', () => PostInput) input: PostInput,
+    @Arg('file', () => GraphQLUpload) file: FileUpload,
     @Ctx() { req }: MyContext,
   ) : Promise<Post> {
+    try {
+      const { createReadStream, filename } = file;
+
+      // eslint-disable-next-line no-promise-executor-return
+      await new Promise((res) => createReadStream()
+        .pipe(createWriteStream(path.join(__dirname, '../music', filename)))
+        .on('close', res));
+    } catch (err) {
+      console.log(err);
+    }
+
     return Post.create({
       ...input,
       creatorId: req ? req.session.userId : 1,
@@ -93,24 +105,6 @@ class PostResolver {
     }
 
     await Post.delete({ id });
-    return true;
-  }
-
-  @Mutation(() => Boolean)
-  async uploadFile(
-    @Arg('file', () => GraphQLUpload) file: FileUpload,
-  ) : Promise<boolean> {
-    try {
-      const { createReadStream, filename } = file;
-
-      // eslint-disable-next-line no-promise-executor-return
-      await new Promise((res) => createReadStream()
-        .pipe(createWriteStream(path.join(__dirname, '../music', filename)))
-        .on('close', res));
-    } catch (err) {
-      return false;
-    }
-
     return true;
   }
 }

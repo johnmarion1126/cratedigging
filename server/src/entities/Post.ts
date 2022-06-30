@@ -20,6 +20,9 @@ class Post extends BaseEntity {
   @Column('text')
     text!: string;
 
+  @Field(() => String)
+    path!: string;
+
   @Field(() => Int)
   @Column({ type: 'int' })
     creatorId!: number;

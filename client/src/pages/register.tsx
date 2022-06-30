@@ -5,8 +5,8 @@ import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
 import { Box, Button } from '@chakra-ui/react';
 
+import Layout from '../components/Layout';
 import toErrorMap from '../utils/toErrorMap';
-import Wrapper from '../components/Wrapper';
 import InputField from '../atoms/InputField';
 import REGISTER from '../graphql/mutations/register';
 import GET_USER_BY_QID from '../graphql/queries/getUserByQid';
@@ -18,7 +18,7 @@ const Register: React.FC<registerProps> = () => {
   const [register] = useMutation(REGISTER);
 
   return (
-    <Wrapper variant="small">
+    <Layout variant="small">
       <Formik
         initialValues={{ username: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
@@ -37,7 +37,11 @@ const Register: React.FC<registerProps> = () => {
           if (response.data?.register.errors) {
             setErrors(toErrorMap(response.data.register.errors));
           } else if (response.data?.register.user) {
-            router.push('/');
+            if (typeof router.query.next === 'string') {
+              router.push(router.query.next);
+            } else {
+              router.push('/');
+            }
           }
         }}
       >
@@ -62,7 +66,7 @@ const Register: React.FC<registerProps> = () => {
           </Form>
         )}
       </Formik>
-    </Wrapper>
+    </Layout>
   );
 };
 

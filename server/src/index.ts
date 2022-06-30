@@ -13,6 +13,13 @@ import dataSource from './dataSource';
 import UserResolver from './resolvers/user';
 import PostResolver from './resolvers/post';
 
+// TODO: Run migrations
+// TODO: Create new tests
+
+// TODO: Save path to music file
+// TODO: Send posts along with music files to client
+// TODO: Create music player
+
 const startServer = async () => {
   await dataSource.initialize();
   const app = express();
