@@ -14,10 +14,7 @@ import dataSource from './dataSource';
 import UserResolver from './resolvers/user';
 import PostResolver from './resolvers/post';
 
-// TODO: Save path to music file
-// TODO: Send posts along with music files to client
 // TODO: Create music player
-
 // TODO: Create new tests
 
 const startServer = async () => {
