@@ -13,8 +13,8 @@ import {
 } from 'type-graphql';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
 
-import { createWriteStream } from 'fs';
 import path from 'path';
+import { createWriteStream } from 'fs';
 import { MyContext } from '../types';
 import Post from '../entities/Post';
 import User from '../entities/User';
@@ -48,12 +48,11 @@ class PostResolver {
     @Arg('file', () => GraphQLUpload) file: FileUpload,
     @Ctx() { req }: MyContext,
   ) : Promise<Post> {
+    const { createReadStream, filename } = file;
     try {
-      const { createReadStream, filename } = file;
-
       // eslint-disable-next-line no-promise-executor-return
       await new Promise((res) => createReadStream()
-        .pipe(createWriteStream(path.join(__dirname, '../music', filename)))
+        .pipe(createWriteStream(path.join(__dirname, '../../music', filename)))
         .on('close', res));
     } catch (err) {
       console.log(err);
@@ -61,6 +60,7 @@ class PostResolver {
 
     return Post.create({
       ...input,
+      path: `/music/${filename}`,
       creatorId: req ? req.session.userId : 1,
     }).save();
   }

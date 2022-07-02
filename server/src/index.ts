@@ -8,17 +8,17 @@ import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
 import { graphqlUploadExpress } from 'graphql-upload';
 
+import path from 'path';
 import { COOKIE_NAME, PORT, SECRET } from './config/constants';
 import dataSource from './dataSource';
 import UserResolver from './resolvers/user';
 import PostResolver from './resolvers/post';
 
-// TODO: Run migrations
-// TODO: Create new tests
-
 // TODO: Save path to music file
 // TODO: Send posts along with music files to client
 // TODO: Create music player
+
+// TODO: Create new tests
 
 const startServer = async () => {
   await dataSource.initialize();
@@ -80,6 +80,8 @@ const startServer = async () => {
       ],
     },
   });
+
+  app.use('/music', express.static(path.join(__dirname, '../music')));
 
   app.listen(PORT, () => {
     console.log(`server started on localhost:${PORT}`);
