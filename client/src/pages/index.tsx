@@ -14,14 +14,6 @@ import GET_POSTS from '../graphql/queries/getPosts';
 const Home: NextPage = () => {
   const { data, loading } = useQuery(GET_POSTS);
 
-  // eslint-disable-next-line no-unused-vars
-  const getMusicFile = async (pathName: string) => {
-    // const res = await fetch(`http://localhost:8000${pathName}`);
-    const res = await fetch('http://localhost:8000/music/test.mp3');
-    console.log(res);
-    console.log(res.body);
-  };
-
   return (
     <Layout>
       <Flex mb={4}>
@@ -34,30 +26,27 @@ const Home: NextPage = () => {
       {!data && loading
         ? (<div>Loading...</div>)
         : (
-          data && data.posts.map((p: any) => {
-            console.log(p.path);
-            getMusicFile(p.path);
-
-            return (
-              <Flex flexDir="column" key={p.id} p={5} borderWidth="1px" mb={5}>
-                <Flex mb={4} w="full">
-                  <Heading fontSize="xl">{p.title}</Heading>
-                  <Text ml={3}>
-                    {' '}
-                    posted by
-                    {' '}
-                    {p.creator.username}
-                  </Text>
-                </Flex>
-                <video controls autoPlay>
-                  <source src="http://localhost:8000/music/test.mp3" type="audio/mpeg" />
-                </video>
-                <Text>
-                  {p.text}
+          data && data.posts.map((p: any) => (!p ? null : (
+            <Flex flexDir="column" key={p.id} p={5} borderWidth="1px" mb={5}>
+              <Flex mb={4} w="full">
+                <Heading fontSize="xl">{p.title}</Heading>
+                <Text ml={3}>
+                  {' '}
+                  posted by
+                  {' '}
+                  {p.creator.username}
                 </Text>
               </Flex>
-            );
-          })
+              <Flex m="auto" h="50px">
+                <video controls autoPlay>
+                  <source src={`http://localhost:8000${p.path}`} type="audio/mpeg" />
+                </video>
+              </Flex>
+              <Text>
+                {p.text}
+              </Text>
+            </Flex>
+          )))
         )}
     </Layout>
   );
