@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 import React from 'react';
 import type { NextPage } from 'next';
 import {
@@ -35,6 +36,11 @@ const Home: NextPage = () => {
                   {' '}
                   {p.creator.username}
                 </Text>
+              </Flex>
+              <Flex m="auto" h="50px">
+                <video controls autoPlay>
+                  <source src={`http://localhost:8000${p.path}`} type="audio/mpeg" />
+                </video>
               </Flex>
               <Text>
                 {p.text}

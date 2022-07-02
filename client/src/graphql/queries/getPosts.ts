@@ -5,6 +5,7 @@ query {
   posts {
     text
     title
+    path
     creator {
       id
       username

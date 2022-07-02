@@ -21,6 +21,7 @@ class Post extends BaseEntity {
     text!: string;
 
   @Field(() => String)
+  @Column('text')
     path!: string;
 
   @Field(() => Int)
